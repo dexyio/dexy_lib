@@ -7,6 +7,8 @@ defmodule DexyLib.Mixfile do
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: description(),
+     package: package(),
      deps: deps()]
   end
 
@@ -29,4 +31,22 @@ defmodule DexyLib.Mixfile do
   defp deps do
     []
   end
+
+  defp description do
+    """
+    Core library that is used in Dex platform.
+    """
+  end
+
+  defp package do
+    [
+      name: :dexy_lib,
+      licenses: ["Apache 2.0"],
+      maintainers: ["Kook Maeng"],
+      links: %{
+        "GitHub" => "https://github.com/dexyio/dexy_lib"
+      }
+    ]
+  end
+
 end
