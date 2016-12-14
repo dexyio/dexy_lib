@@ -53,12 +53,12 @@ defmodule DexyLib.Mappy do
 
   defmacro get(map, key) when is_bitstring(key) do
     key = (key |> transform |> parse_var!)
-    quote do: Dex.Map.val unquote(map), unquote(key)
+    quote do: unquote(__MODULE__).val unquote(map), unquote(key)
   end
 
   defmacro get(map, key) do
     quote do
-      Dex.Map.val unquote(map), unquote(key)
+      unquote(__MODULE__).val unquote(map), unquote(key)
     end
   end
 
