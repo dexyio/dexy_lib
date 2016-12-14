@@ -1,0 +1,10 @@
+/_build
+/cover
+/deps
+/doc
+/log
+
+erl_crash.dump
+*.ez
+*.log
+*.bak
