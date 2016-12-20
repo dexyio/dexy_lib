@@ -3,7 +3,7 @@ defmodule DexyLib.Mixfile do
 
   def project do
     [app: :dexy_lib,
-     version: "0.1.0",
+     version: "0.2.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -16,7 +16,7 @@ defmodule DexyLib.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :timex]]
   end
 
   # Dependencies can be Hex packages:
@@ -29,7 +29,10 @@ defmodule DexyLib.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:ex_doc, "~> 0.14", only: :dev}]
+    [
+      {:ex_doc, "~> 0.14", only: :dev},
+      {:timex, "~> 3.0"},
+    ]
   end
 
   defp description do
