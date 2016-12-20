@@ -3,6 +3,9 @@ defmodule DexyLibTest do
   use DexyLib
   doctest DexyLib
 
+  deferror ErrorFoo
+  deferror ErrorBar
+
   test "correct" do
     map = Mappy.set %{}, "a", 1
     assert 1 == Mappy.val map, "a" 
@@ -21,5 +24,11 @@ defmodule DexyLibTest do
     assert 1 == Mappy.get map, "a[b]"
     assert nil == Mappy.get map, "a[x]"
   end 
+
+  test "raise error" do
+    assert_raise ErrorFoo, fn ->
+      raise ErrorFoo
+    end
+  end
 
 end

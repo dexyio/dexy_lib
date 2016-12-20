@@ -2,6 +2,7 @@ defmodule DexyLib do
 
   defmacro __using__(_) do
     quote do
+      use unquote(__MODULE__).Error
       require unquote(__MODULE__).Mappy, as: Mappy
     end
   end # defmacro
@@ -205,11 +206,7 @@ defmodule DexyLib do
   defp do_take(data, cnt) when cnt < 0 do slice data, cnt, -(cnt) end
   defp do_take(_, _) do [] end
 
-  def bytes(str) when is_bitstring(str) do
-    byte_size str
-  end
-
-  def bytes _ do 0 end
+  def bytes(str), do: byte_size str
   
   def upcase(str) when is_bitstring(str) do
     String.upcase str
