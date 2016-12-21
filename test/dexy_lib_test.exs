@@ -4,16 +4,16 @@ defmodule DexyLibTest do
   use DexyLib
   doctest DexyLib
 
-  deferror ErrorFoo
-  deferror ErrorBar
+  deferror Error.Foo
+  deferror Error.Bar
 
   test "the true" do
     assert 2 == 1 + 1
   end 
 
   test "raise error" do
-    assert_raise ErrorFoo, fn ->
-      raise ErrorFoo
+    assert_raise Error.Foo, fn ->
+      raise Error.Foo
     end
   end
 

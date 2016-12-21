@@ -2,6 +2,8 @@ defmodule DexyLib.MappyTest do
 
   use ExUnit.Case
   use DexyLib
+  alias DexyLib.Mappy
+
   doctest DexyLib.Mappy
 
   test "the true" do

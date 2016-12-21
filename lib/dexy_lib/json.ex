@@ -1,6 +1,7 @@
 defmodule DexyLib.JSON do
 
   @adapter Application.get_env(:dexy_lib, __MODULE__)[:adapter]
+    || __MODULE__.Adapters.Poison
 
   defmodule Adapter do
     @type json :: bitstring

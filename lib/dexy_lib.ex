@@ -3,7 +3,7 @@ defmodule DexyLib do
   defmacro __using__(_) do
     quote do
       use unquote(__MODULE__).Error
-      require unquote(__MODULE__).Mappy, as: Mappy
+      require unquote(__MODULE__).Mappy
     end
   end # defmacro
 
