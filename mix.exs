@@ -3,7 +3,7 @@ defmodule DexyLib.Mixfile do
 
   def project do
     [app: :dexy_lib,
-     version: "0.2.0",
+     version: "0.2.1",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -32,6 +32,9 @@ defmodule DexyLib.Mixfile do
     [
       {:ex_doc, "~> 0.14", only: :dev},
       {:timex, "~> 3.0"},
+
+      # adapters
+      {:poison, "~> 3.0"},
     ]
   end
 

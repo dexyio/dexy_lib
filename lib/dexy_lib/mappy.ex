@@ -2,6 +2,8 @@ defmodule DexyLib.Mappy do
 
   alias DexyLib, as: Lib
 
+  @type t :: map()
+
   def new do %{} end
 
   def set(map, key, val) when is_bitstring(key) do
@@ -41,6 +43,13 @@ defmodule DexyLib.Mappy do
   defp do_set(parent, [{:list, [number: no]} | rest], val, map) when is_list(parent)  do
     new_parent = Enum.at parent, no
     List.replace_at parent, no, do_set(new_parent, rest, val, map)
+  end
+
+  def val(map, key, default) do
+    case val(map, key) do
+      :error -> default
+      val -> val
+    end
   end
 
   def val(map, key) when is_list(key) do
