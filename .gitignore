@@ -3,9 +3,11 @@
 /deps
 /doc
 /log
-
-erl_crash.dump
 *.ez
 *.log
 *.bak
 .*.swp
+.secret.exs
+.DS_Store
+mix.lock
+erl_crash.dump

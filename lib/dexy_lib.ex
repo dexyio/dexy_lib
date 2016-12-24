@@ -1,7 +1,11 @@
 defmodule DexyLib do
 
-  defmacro __using__(_) do
+  defmacro __using__(opts \\ []) do
+    quote_as = (as = opts[:as]) && quote do
+      alias unquote(__MODULE__), as: unquote(as)
+    end
     quote do
+      unquote quote_as
       use unquote(__MODULE__).Error
       require unquote(__MODULE__).Mappy
     end
