@@ -10,7 +10,7 @@ defmodule DexyLib.Error do
     quote do
       defmodule unquote(name) do
         defexception message: to_string(unquote name)
-                              |> String.trim_leading("Elixir.Dex.Error."),
+                              |> String.split(".") |> List.last,
                      code: unquote(code),
                      reason: nil,
                      state: nil
