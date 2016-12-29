@@ -16,4 +16,9 @@ defmodule DexyLib.JSONTest do
     assert "{\"b\":2,\"a\":1}" == JSON.encode! %{:a => 1, "b" => 2}
   end
 
+  test "incorrect" do
+    assert {:error, {}} = catch_throw(JSON.encode! {}) 
+    assert {:error, "'t' at 0"} = catch_throw(JSON.decode! "test") 
+  end
+
 end
