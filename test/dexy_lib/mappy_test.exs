@@ -6,9 +6,9 @@ defmodule DexyLib.MappyTest do
 
   doctest DexyLib.Mappy
 
-  test "the true" do
+  test "set & get" do
     map = Mappy.set %{}, "a", 1
-    assert 1 == Mappy.val map, "a" 
+    assert 1 == Mappy.val map, "a"
 
     map = Mappy.set %{}, "a.b", 1
     assert %{"b" => 1} == Mappy.val map, "a" 
@@ -23,6 +23,9 @@ defmodule DexyLib.MappyTest do
     assert 1 == Mappy.get map, "a['b']"
     assert 1 == Mappy.get map, "a[b]"
     assert nil == Mappy.get map, "a[x]"
+
+    assert nil == Mappy.get %{}, "invalid"
+    assert :error == Mappy.get %{}, "invalid", :error
   end 
 
 end

@@ -11,41 +11,48 @@ defmodule DexyLib do
     end
   end # defmacro
 
-  def get(data = _.._, key) do get_range data, key end
-  def get(data, key) when is_map(data) do get_map data, key end
-  def get(data, key) when is_list(data) do get_list data, key end
-  def get(data, key) when is_tuple(data) do get_tuple data, key end
-  def get(data, key) when is_bitstring(data) do get_string data, key end
-  def get(_data, _key) do nil end
+  def get(data, key, default \\ nil) do
+    case do_get data, key do
+      :error -> default
+      val -> val
+    end
+  end
 
-  defp get_list(data, key = _.._), do: slice! data, key
-  defp get_list(data, key) when is_number(key), do: at! data, key
+  def do_get(data = _.._, key) do get_range data, key end
+  def do_get(data, key) when is_map(data) do get_map data, key end
+  def do_get(data, key) when is_list(data) do get_list data, key end
+  def do_get(data, key) when is_tuple(data) do get_tuple data, key end
+  def do_get(data, key) when is_bitstring(data) do get_string data, key end
+  def do_get(_data, _key) do :error end
+
+  defp get_list(data, key = _.._), do: slice data, key
+  defp get_list(data, key) when is_number(key), do: at data, key
   defp get_list(data, key) when is_list(key),
        do: for x <- key, do: get_list(data, x)
-  defp get_list(_, _), do: nil
+  defp get_list(_, _), do: :error
 
-  defp get_range(data, key = _.._), do: slice! data, key
-  defp get_range(data, key) when is_number(key), do: at! data, key
+  defp get_range(data, key = _.._), do: slice data, key
+  defp get_range(data, key) when is_number(key), do: at data, key
   defp get_range(data, key) when is_list(key),
        do: for x <- key, do: get_range(data, x)
-  defp get_range(_, _), do: nil
+  defp get_range(_, _), do: :error
 
-  defp get_map(data, key = _.._), do: slice! data, key
-  defp get_map(data, key) when is_number(key), do: at! data, key
-  defp get_map(data, key) when is_bitstring(key), do: data[key]
+  defp get_map(data, key = _.._), do: slice data, key
+  defp get_map(data, key) when is_number(key), do: at data, key
+  defp get_map(data, key) when is_bitstring(key), do: Map.get(data, key, :error)
   defp get_map(data, key) when is_list(key),
        do: for x <- key, into: %{}, do: get_map(data, x)
   defp get_map(data, key) when is_map(key),
        do: for {k, v} <- key, data[k] == v, into: %{}, do: {k, v}
-  defp get_map(_, _), do: nil
+  defp get_map(_, _), do: :error
 
-  defp get_tuple(data, key = _.._), do: slice! data, key
-  defp get_tuple(data, key) when is_number(key), do: at! data, key
+  defp get_tuple(data, key = _.._), do: slice data, key
+  defp get_tuple(data, key) when is_number(key), do: at data, key
   defp get_tuple(data, key) when is_list(key),
        do: for x <- key, into: {}, do: get_tuple(data, x)
   defp get_tuple(data, key) when is_tuple(key),
        do: for x <- Tuple.to_list(key), Enum.member?(data, x), into: {}, do: x
-  defp get_tuple(_, _), do: nil
+  defp get_tuple(_, _), do: :error
 
   defp get_string(data, key) do
     case String.codepoints(data) |> get_list(key) do
@@ -184,7 +191,7 @@ defmodule DexyLib do
     do_slice val, at, cnt
   end
 
-  def slice(_val, _at, _cnt) do {:error, :invalid_argument} end
+  def slice(_val, _at, _cnt) do :error end
   def slice!(_val, _at, _cnt) do [] end
 
   defp do_slice(val = _.._, at, cnt),

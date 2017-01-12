@@ -45,45 +45,47 @@ defmodule DexyLib.Mappy do
     List.replace_at parent, no, do_set(new_parent, rest, val, map)
   end
 
-  def val(map, key, default) do
-    case val(map, key) do
+  def val map, key, default \\ nil do
+    case do_val map, key do
       :error -> default
-      val -> val
+      result -> result
     end
   end
 
-  def val(map, key) when is_list(key) do
+  defp do_val(map, key) when is_list(key) do
     val_parsed key, map, map
   end
 
-  def val(_, "true"), do: true
-  def val(_, "false"), do: false
-  def val(_, "nil"), do: nil
+  defp do_val(_, "true"), do: true
+  defp do_val(_, "false"), do: false
+  defp do_val(_, "nil"), do: nil
 
-  def val(map, key) when is_bitstring(key) do
-    val(map, parse_var! key)
+  defp do_val(map, key) when is_bitstring(key) do
+    do_val(map, parse_var! key)
   end
 
-  defmacro get(map, key) when is_bitstring(key) do
+  defmacro get(map, key, default \\ nil) 
+
+  defmacro get(map, key, default) when is_bitstring(key) do
     key = (key |> transform |> parse_var!)
-    quote do: unquote(__MODULE__).val unquote(map), unquote(key)
+    quote do: unquote(__MODULE__).val unquote(map), unquote(key), unquote(default)
   end
 
-  defmacro get(map, key) do
+  defmacro get(map, key, default) do
     quote do
-      unquote(__MODULE__).val unquote(map), unquote(key)
+      unquote(__MODULE__).val unquote(map), unquote(key), unquote(default)
     end
   end
 
   defp val_parsed([], parent, _map) do parent end
 
   defp val_parsed([{:var, var} | rest], parent, map) do
-    if val = map[var], do: (val_parsed rest, Lib.get(parent, val), map),
+    if val = map[var], do: (val_parsed rest, Lib.get(parent, val, :error), map),
     else: (val_parsed rest, nil, map)
   end
 
   defp val_parsed([{:val, val} | rest], parent, map) do
-    val_parsed rest, Lib.get(parent, val), map
+    val_parsed rest, Lib.get(parent, val, :error), map
   end
 
   defp val_parsed([{:number, val} | rest], parent, map) do
