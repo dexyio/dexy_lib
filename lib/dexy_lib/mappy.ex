@@ -56,6 +56,10 @@ defmodule DexyLib.Mappy do
     val_parsed key, map, map
   end
 
+  def val(_, "true"), do: true
+  def val(_, "false"), do: false
+  def val(_, "nil"), do: nil
+
   def val(map, key) when is_bitstring(key) do
     val(map, parse_var! key)
   end
