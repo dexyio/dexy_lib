@@ -105,7 +105,7 @@ defmodule DexyLib.Mappy do
 
   defp val_parsed([{:multiple, val} | rest], parent, map) do
     val2 = val_parsed val, map, map
-    parent2 = Lib.get(parent, val2)
+    parent2 = Lib.get(parent, val2, :error)
     val_parsed rest, parent2, map
   end
 

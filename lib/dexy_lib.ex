@@ -18,12 +18,12 @@ defmodule DexyLib do
     end
   end
 
-  def do_get(data = _.._, key) do get_range data, key end
-  def do_get(data, key) when is_map(data) do get_map data, key end
-  def do_get(data, key) when is_list(data) do get_list data, key end
-  def do_get(data, key) when is_tuple(data) do get_tuple data, key end
-  def do_get(data, key) when is_bitstring(data) do get_string data, key end
-  def do_get(_data, _key) do :error end
+  defp do_get(data = _.._, key) do get_range data, key end
+  defp do_get(data, key) when is_map(data) do get_map data, key end
+  defp do_get(data, key) when is_list(data) do get_list data, key end
+  defp do_get(data, key) when is_tuple(data) do get_tuple data, key end
+  defp do_get(data, key) when is_bitstring(data) do get_string data, key end
+  defp do_get(_data, _key) do :error end
 
   defp get_list(data, key = _.._), do: slice data, key
   defp get_list(data, key) when is_number(key), do: at data, key
