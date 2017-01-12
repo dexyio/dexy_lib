@@ -23,9 +23,8 @@ defmodule DexyLib.MappyTest do
     assert 1 == Mappy.get map, "a['b']"
     assert 1 == Mappy.get map, "a[b]"
     assert nil == Mappy.get map, "a[x]"
-
+    assert nil == Mappy.get map, "a[,x]"
     assert nil == Mappy.get %{}, "invalid"
-    assert :error == Mappy.get %{}, "invalid", :error
   end 
 
 end

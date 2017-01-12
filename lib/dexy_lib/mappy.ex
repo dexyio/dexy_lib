@@ -45,47 +45,40 @@ defmodule DexyLib.Mappy do
     List.replace_at parent, no, do_set(new_parent, rest, val, map)
   end
 
-  def val map, key, default \\ nil do
-    case do_val map, key do
-      :error -> default
-      result -> result
-    end
-  end
-
-  defp do_val(map, key) when is_list(key) do
+  def val(map, key) when is_list(key) do
     val_parsed key, map, map
   end
 
-  defp do_val(_, "true"), do: true
-  defp do_val(_, "false"), do: false
-  defp do_val(_, "nil"), do: nil
+  def val(_, "true"), do: true
+  def val(_, "false"), do: false
+  def val(_, "nil"), do: nil
 
-  defp do_val(map, key) when is_bitstring(key) do
-    do_val(map, parse_var! key)
+  def val(map, key) when is_bitstring(key) do
+    val(map, parse_var! key)
   end
 
   defmacro get(map, key, default \\ nil) 
 
   defmacro get(map, key, default) when is_bitstring(key) do
     key = (key |> transform |> parse_var!)
-    quote do: unquote(__MODULE__).val unquote(map), unquote(key), unquote(default)
+    quote do: unquote(__MODULE__).val unquote(map), unquote(key)
   end
 
   defmacro get(map, key, default) do
     quote do
-      unquote(__MODULE__).val unquote(map), unquote(key), unquote(default)
+      unquote(__MODULE__).val unquote(map), unquote(key)
     end
   end
 
   defp val_parsed([], parent, _map) do parent end
 
   defp val_parsed([{:var, var} | rest], parent, map) do
-    if val = map[var], do: (val_parsed rest, Lib.get(parent, val, :error), map),
+    if val = map[var], do: (val_parsed rest, Lib.get(parent, val), map),
     else: (val_parsed rest, nil, map)
   end
 
   defp val_parsed([{:val, val} | rest], parent, map) do
-    val_parsed rest, Lib.get(parent, val, :error), map
+    val_parsed rest, Lib.get(parent, val), map
   end
 
   defp val_parsed([{:number, val} | rest], parent, map) do
@@ -105,7 +98,7 @@ defmodule DexyLib.Mappy do
 
   defp val_parsed([{:multiple, val} | rest], parent, map) do
     val2 = val_parsed val, map, map
-    parent2 = Lib.get(parent, val2, :error)
+    parent2 = Lib.get(parent, val2)
     val_parsed rest, parent2, map
   end
 
