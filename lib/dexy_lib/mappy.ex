@@ -28,6 +28,8 @@ defmodule DexyLib.Mappy do
         Map.put parent || %{}, key2, do_set(parent2, rest, val, map)
       key2 when is_integer(key2) ->
         do_set(parent, [{:list, [number: key2]} | rest], val, map)
+      _ -> 
+        do_set(nil, rest, val, map)
     end
   end
 
