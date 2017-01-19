@@ -27,4 +27,11 @@ defmodule DexyLib.MappyTest do
     assert nil == Mappy.get %{}, "invalid"
   end 
 
+  test "foo" do
+    map = Mappy.set %{}, "data", [1, 2, 3]
+    map = Mappy.set map, "i", 1
+    map = Mappy.set map, "data[i]", 4
+    IO.inspect map
+  end
+
 end

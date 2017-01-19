@@ -22,9 +22,13 @@ defmodule DexyLib.Mappy do
   end
 
   defp do_set(parent, [{:list, [var: key]} | rest], val, map) do
-    key = map[key]
-    parent2 = Lib.get(parent, key)
-    Map.put parent || %{}, key, do_set(parent2, rest, val, map)
+    case map[key] do
+      key2 when is_bitstring(key2) ->
+        parent2 = Lib.get(parent, key2)
+        Map.put parent || %{}, key2, do_set(parent2, rest, val, map)
+      key2 when is_integer(key2) ->
+        do_set(parent, [{:list, [number: key2]} | rest], val, map)
+    end
   end
 
   defp do_set(parent, [{:list, [val: key]} | rest], val, map) do
