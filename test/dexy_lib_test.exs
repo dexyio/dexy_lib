@@ -7,8 +7,28 @@ defmodule DexyLibTest do
   deferror Error.Foo
   deferror Error.Bar
 
-  test "the true" do
-    assert 2 == 1 + 1
+  test "supervisor" do
+    defmodule Supervisor do
+      use DexyLib.Supervisor, otp_app: :dexy_lib
+    end
+
+    defmodule Foo.Supervisor do
+      use DexyLib.Supervisor, otp_app: :dexy_lib
+    end
+
+    defmodule Foo.Worker do
+      use GenServer
+      def start_link, do: GenServer.start_link(__MODULE__, [])
+      def init(state), do: {:ok, state}
+    end
+
+    Application.put_env(:dexy_lib, __MODULE__.Supervisor, children: [
+      supervisor: Foo.Supervisor,
+      worker: Foo.Worker
+    ])
+
+    {:ok, _pid} = Supervisor.start_link
+    assert [{Foo.Worker, _}, {Foo.Supervisor, _}] = Supervisor.members
   end 
 
   test "raise error" do
