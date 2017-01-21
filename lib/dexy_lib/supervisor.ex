@@ -22,7 +22,7 @@ defmodule DexyLib.Supervisor do
           |> Enum.map(fn {name, pid, _, _} -> {name, pid} end)
       end
 
-      defp children sup_name do
+      def children sup_name do
         children = Application.get_env(unquote(app), sup_name)[:children] || []
         for {type, spec} <- children do
           {mod, args, opts} = case spec do
@@ -34,7 +34,7 @@ defmodule DexyLib.Supervisor do
         end
       end
 
-      defp start_child type, module, args \\ [], opts \\ [] do
+      def start_child type, module, args \\ [], opts \\ [] do
         child = apply(Elixir.Supervisor.Spec, type, [module, args, opts])
         Elixir.Supervisor.start_child(__MODULE__, child)
       end
