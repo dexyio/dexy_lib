@@ -125,7 +125,7 @@ defmodule DexyLib do
   defmacro unique do
     quote do
       :base62.encode(<<trunc(unquote(__MODULE__).now :usecs)::64>>) <>
-      :base62.encode(<<:erlang.phash2(node())::32, :crypto.rand_bytes(4)::binary>>)
+      :base62.encode(<<:erlang.phash2(node())::32, :crypto.strong_rand_bytes(4)::binary>>)
     end
   end
 
