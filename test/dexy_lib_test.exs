@@ -1,7 +1,7 @@
 defmodule DexyLibTest do
 
   use ExUnit.Case
-  use DexyLib
+  use DexyLib, as: Lib
   doctest DexyLib
 
   deferror Error.Foo
@@ -9,11 +9,11 @@ defmodule DexyLibTest do
 
   test "supervisor" do
     defmodule Supervisor do
-      use DexyLib.Supervisor, otp_app: :dexy_lib
+      use Lib.Supervisor, otp_app: :dexy_lib
     end
 
     defmodule Foo.Supervisor do
-      use DexyLib.Supervisor, otp_app: :dexy_lib
+      use Lib.Supervisor, otp_app: :dexy_lib
     end
 
     defmodule Foo.Worker do
@@ -30,6 +30,10 @@ defmodule DexyLibTest do
     {:ok, _pid} = Supervisor.start_link
     assert [{Foo.Worker, _}, {Foo.Supervisor, _}] = Supervisor.members
   end 
+
+  test "public functions" do
+    assert String.length(Lib.unique) == 19
+  end
 
   test "raise error" do
     assert_raise Error.Foo, fn ->
