@@ -33,6 +33,13 @@ defmodule DexyLibTest do
 
   test "public functions" do
     assert String.length(Lib.unique) == 19
+    assert Lib.to_string(nil) == ""
+    assert Lib.to_string(nil, "nil") == "nil"
+    assert Lib.to_string(:atom) == "atom"
+    assert Lib.to_string(123) == "123"
+    assert Lib.to_string("foo") == "foo"
+    assert Lib.to_string([]) == "[]"
+    assert Lib.to_string(Map.new) == "%{}"
   end
 
   test "raise error" do

@@ -18,6 +18,8 @@ defmodule DexyLib do
     end
   end
 
+  import Kernel, except: [to_string: 1]
+
   defp do_get(data = _.._, key) do get_range data, key end
   defp do_get(data, key) when is_map(data) do get_map data, key end
   defp do_get(data, key) when is_list(data) do get_list data, key end
@@ -91,7 +93,7 @@ defmodule DexyLib do
   def length(val) when is_bitstring(val) do String.length val end
   def length(val) when is_tuple(val) do tuple_size val end
   def length(val) when is_number(val) do
-    val |> to_string |> __MODULE__.length
+    val |> Kernel.to_string |> __MODULE__.length
   end
 
   def length nil do 0 end
@@ -104,6 +106,13 @@ defmodule DexyLib do
     regex = opts[:trim] && ~r/ *\r*\n */ || ~r/\r*\n/
     String.split str, regex, opts
   end
+
+  def to_string(val, default \\ "")
+  def to_string(nil, default) do default end
+  def to_string(val, _) when is_bitstring(val) do val end
+  def to_string(val, _) when is_atom(val) do Kernel.to_string val end
+  def to_string(val, _) when is_number(val) do Kernel.to_string val end
+  def to_string(val, _) do inspect val end
 
   defmacro now, do: quote do: :os.timestamp
 
